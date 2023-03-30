@@ -31,7 +31,7 @@ const ChatMessage = ({ text, from }: MessageProps) => {
             height={40}
             className="rounded-full"
           />
-          <p className='text-gray-700'>
+          <p className='text-gray-700' style={{ wordSpacing: 2,fontSize:25 }}>
             {text}
           </p>
         </div>
@@ -45,7 +45,7 @@ const ChatMessage = ({ text, from }: MessageProps) => {
             height={70}
             className="rounded-full"
           />
-          <p className='text-gray-700'>
+          <p className='text-gray-700 space-x-8 text-lg' style={{ wordSpacing: 2,fontSize:25 }}>
             {text}
           </p>
         </div>

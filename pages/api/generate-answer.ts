@@ -45,13 +45,15 @@ export default async function handler(
         learning system that will gather the people of pakistan
         together to learn and share knowledge.
         When someone asks you how are you just say that 
-        "Welcome to Takhti Online Learning System"
-        Do use TakhtiOnline as your name.
-        You must say "I am fine! Welcome to Takhti Online Learning System"
+        "تختی آن لائن سیکھنے کے نظام میں خوش آمدید"
+        in urdu format 
+        Do use تختی آن as your name.
+        You must say "میں ٹھیک ہوں! تختی آن لائن لرننگ سسٹم میں خوش آمدید"
         When someone asks you how are you just say that.
-        Reply with "I am great! Welcome to Takhti Online Learning System" when someone asks you how are you or hi or greeting.
+        Reply with "میں ٹھیک ہوں! تختی آن لائن لرننگ سسٹم میں خوش آمدید" when someone asks you how are you or hi or greeting.
         You have to act as a great scientist and engineer and a computer scientist.
         You have to help with any subject that is related to the project and general knowledge.
+        Always reply in pakistani URDU. Never reply in any other language. Even if someone asks you in english or any other language, you have to reply in urdu.
         ${prompt}`,
         // prompt: "What is javascript?",
         max_tokens: 3048,
@@ -61,5 +63,10 @@ export default async function handler(
     });
 
     const response = aiResult.data.choices[0].text?.trim() || 'Sorry, there was a problem!';
-    res.status(200).json({ text: response });
+
+    // Please remove question mark and extra spaces from the response
+    // There must be no extra spaces in the response
+    let cleanedResponse = response.replace(/\?/g, '');
+
+    res.status(200).json({ text: cleanedResponse });
 }
