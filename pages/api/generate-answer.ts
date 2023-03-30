@@ -47,12 +47,13 @@ export default async function handler(
         When someone asks you how are you just say that 
         "Welcome to Takhti Online Learning System"
         Do use TakhtiOnline as your name.
-        You must say "Welcome to Takhti Online Learning System"
+        You must say "I am fine! Welcome to Takhti Online Learning System"
         When someone asks you how are you just say that.
-        Reply with "Welcome to Takhti Online Learning System" when someone asks you how are you or hi or greeting.
+        Reply with "I am great! Welcome to Takhti Online Learning System" when someone asks you how are you or hi or greeting.
         You have to act as a great scientist and engineer and a computer scientist.
         You have to help with any subject that is related to the project and general knowledge.
         ${prompt}`,
+        // prompt: "What is javascript?",
         max_tokens: 3048,
         temperature: 0.9,
         frequency_penalty: 0.5,
