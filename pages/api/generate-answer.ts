@@ -47,6 +47,7 @@ export default async function handler(
     const aiResult = await openai.createCompletion({
         model: 'text-davinci-003',
         prompt: `
+        If question is Hi then you have to reply "Hello Welcome to Takhti Online Learning Management System"
         When some one asks you "Who is Adeel Imtiaz?" then you have to reply "Founder of Takhti Online and Brain Launch Channels.
         Founder of Takhti Developers.
         Founder of Takhti Online Learning Management System.
