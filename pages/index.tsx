@@ -380,7 +380,7 @@ export default function Home() {
       </header>
       <main
         className="relative max-w-2xl mx-auto">
-        <div className='sticky top-0 w-full pt-5 px-4'>
+        {/* <div className='sticky top-0 w-full pt-5 px-4'>
           <ChatInput onSend={(input) => callApi(input)} disabled={loading} />
         </div>
 
@@ -398,7 +398,10 @@ export default function Home() {
               I am at your service. Ask me anything.
             </p>
           )}
-        </div>
+        </div> */}
+        <h1 className="text-center text-black" style={{fontSize:"3rem"}}>
+          Under Development
+        </h1>
         <br />
       </main>
     </>
