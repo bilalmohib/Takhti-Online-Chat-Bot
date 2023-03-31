@@ -290,7 +290,7 @@ export default function Home() {
         <div className="flex items-center justify-between max-w-2xl mx-auto px-4 py-4">
           <div className="flex-col items-center">
             <h2 className="text-2xl font-bold text-gray-800">
-              TAKHTI ONLINE CHAT BOT
+              TAKHTI CHAT BOT
             </h2>
             {/* Now display some description about the takhti chat bot */}
             <p className="text-gray-600 ml-2">
@@ -344,17 +344,17 @@ export default function Home() {
 
               <p
                 className="text-gray-600 ml-2"
-                style={{ fontSize: "0.8rem" }}
+                style={{ fontSize: "1rem" }}
               >
                 {signedInUserData.email}
               </p>
 
-              <p
+              {/* <p
                 className="text-gray-600 ml-2"
                 style={{ fontSize: "0.8rem" }}
               >
                 {signedInUserData.uid}
-              </p>
+              </p> */}
             </>
           )}
         </div>
