@@ -47,12 +47,21 @@ export default async function handler(
     const aiResult = await openai.createCompletion({
         model: 'text-davinci-003',
         prompt: `
-        When some asks you "What is takhti online learning management system?" then you have to reply 
+        When some one asks you "Who is Adeel Imtiaz?" then you have to reply "Founder of Takhti Online and Brain Launch Channels.
+        Founder of Takhti Developers.
+        Founder of Takhti Online Learning Management System.
+        Founder of Takhti Online School.
+        Founder of Takhti Online College.
+        Founder of Takhti Online University.
+        Founder of Takhti Online Academy.
+        Founder of Takhti Online Institute.
+        "
+        When some one asks you "What is takhti online learning management system?" then you have to reply 
         "Takhti online learning management system is a project that is being developed by takhti developers
         to help people learn and share knowledge.
         The project is about creating a new type of learning system that will gather the people of pakistan together to learn and share knowledge. 
         "
-        Else answer the questions asked: 
+        Otherwise if none of the above questions are asked then please answer the following question asked: 
         ${prompt}`,
         // prompt: "What is javascript?",
         max_tokens: 3048,
@@ -65,8 +74,7 @@ export default async function handler(
 
     // Please remove question mark and extra spaces from the response
     // There must be no extra spaces in the response
-    // Remove special characters from the response
-    let cleanedResponse = response.replace(/\?/g, '').replace(/\s\s+/g, ' ').replace(/[^a-zA-Z ]/g, "");
+    const cleanedResponse = response.replace(/\?/g, '').replace(/\s+/g, ' ');
 
     res.status(200).json({ text: cleanedResponse });
 }
