@@ -1,6 +1,42 @@
 import Head from 'next/head'
 import Image from 'next/image';
 import useState from 'react-usestateref';
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/router';
+
+import LogoutIcon from '@mui/icons-material/Logout';
+
+import {
+  db,
+  doc,
+  collection,
+  onSnapshot,
+  addDoc,
+  query,
+  orderBy,
+  deleteDoc,
+  setDoc,
+  Timestamp
+} from "../firebase";
+
+import {
+  Button,
+  Avatar
+} from '@mui/material';
+
+// Importing firebase
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  TwitterAuthProvider,
+  signInAnonymously
+} from "firebase/auth";
+import { auth } from "../firebase";
 
 enum Creator {
   Me = 0,
@@ -11,6 +47,7 @@ interface MessageProps {
   text: string;
   from: Creator;
   key: number;
+  userPhotoURL: string;
 }
 
 interface InputProps {
@@ -19,19 +56,23 @@ interface InputProps {
 }
 
 // One Message in Chat 
-const ChatMessage = ({ text, from }: MessageProps) => {
+const ChatMessage = ({
+  text,
+  from,
+  userPhotoURL
+}: MessageProps) => {
   return (
     <>
       {from == Creator.Me && (
         <div className="bg-white p-4 rounded-lg flex gap-4 items-center whitespace-pre-wrap">
           <Image
-            src="/user.jpeg"
+            src={userPhotoURL}
             alt="User"
             width={40}
             height={40}
             className="rounded-full"
           />
-          <p className='text-gray-700' style={{ wordSpacing: 2,fontSize:25 }}>
+          <p className='text-gray-700' style={{ wordSpacing: 2, fontSize: 25 }}>
             {text}
           </p>
         </div>
@@ -45,7 +86,7 @@ const ChatMessage = ({ text, from }: MessageProps) => {
             height={70}
             className="rounded-full"
           />
-          <p className='text-gray-700 space-x-8 text-lg' style={{ wordSpacing: 2,fontSize:25 }}>
+          <p className='text-gray-700 space-x-8 text-lg' style={{ wordSpacing: 2, fontSize: 25 }}>
             {text}
           </p>
         </div>
@@ -108,8 +149,57 @@ const ChatInput = ({ onSend, disabled }: InputProps) => {
 
 // Our Page
 export default function Home() {
+  const router = useRouter();
+
   const [messages, setMessages, messagesRef] = useState<MessageProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // States for status of login users
+  const [signedInUserData, setSignedInUserData] = useState<any>(null);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // If user is signed in Navigate to Home Page
+        // navigate('/');
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        // When the user state is known, we set the state isSignedIn to true
+        if (signedInUserData === null) {
+          // If anonymous user is signed in
+          // Set the user data to the signed in user
+          if (user.isAnonymous) {
+            setSignedInUserData(
+              {
+                displayName: "Anonymous",
+                email: "Anonymous",
+                photoURL: "Anonymous",
+                uid: user.uid
+              }
+            );
+          }
+          setSignedInUserData(user);
+          console.log("Signed In User Data ==> ", user);
+          setIsSignedIn(true);
+          // router.push('/');
+        }
+      } else {
+        // User is signed out
+        console.log("User is Not Signed In Yet");
+        // When the user state is known, we set the state isSignedIn to false
+        setIsSignedIn(false);
+        // Navigate to Login Page
+        alert("Please Login First")
+        router.push('/login');
+        // ...
+      }
+      // When the user state is known, we set the loading state to false
+      setLoading(false);
+    });
+  });
 
   const callApi = async (input: string) => {
     setLoading(true);
@@ -117,7 +207,8 @@ export default function Home() {
     const myMessage: MessageProps = {
       text: input,
       from: Creator.Me,
-      key: new Date().getTime()
+      key: new Date().getTime(),
+      userPhotoURL: signedInUserData.photoURL
     };
 
     setMessages([...messagesRef.current, myMessage]);
@@ -138,14 +229,53 @@ export default function Home() {
       const botMessage: MessageProps = {
         text: response.text,
         from: Creator.Bot,
-        key: new Date().getTime()
+        key: new Date().getTime(),
+        userPhotoURL: signedInUserData.photoURL
       };
+
+      // Now adding the data to the firestore
+      addData(
+        {
+          "user": signedInUserData.email,
+          "uuid": signedInUserData.uid,
+          "name": signedInUserData.displayName,
+          "photoURL": signedInUserData.photoURL,
+          "question": input,
+          "answer": response.text,
+          "timestamp": new Date().toLocaleString()
+        }
+      );
 
       setMessages([...messagesRef.current, botMessage]);
     } else {
       // Show Error
     }
   };
+
+  const addData = (data: any) => {
+    if (signedInUserData !== null) {
+      ////////////////////////////// For New Version of Firebase(V9) //////////////////////////////
+      // ADD JOB TO FIRESTORE
+      addDoc(collection(db, `Data/Chat/${signedInUserData.email}`), data)
+        .then(() => {
+          console.log("Data sent");
+          // alert("Your Project is initialized Successfully.Redirecting you to your projects page.");
+        })
+        .catch(err => {
+          console.warn(err);
+          alert(`Error creating Job: ${err.message}`);
+        });
+      //
+      ////////////////////////////// For New Version of Firebase(V9) //////////////////////////////
+
+      //Now sending the data for notifications
+      // }
+      // else {
+      //   alert("Please sign in to save project to cloud.")
+      // }
+      return;
+    }
+  }
 
   return (
     <>
@@ -156,9 +286,95 @@ export default function Home() {
         <link rel="icon" href="/bot.png" />
       </Head>
 
+      <header>
+        <div className="flex items-center justify-between max-w-2xl mx-auto px-4 py-4">
+          <div className="flex-col items-center">
+            <h2 className="text-2xl font-bold text-gray-800">
+              TAKHTI ONLINE CHAT BOT
+            </h2>
+            {/* Now display some description about the takhti chat bot */}
+            <p className="text-gray-600 ml-2">
+              Powered by GPT-3.5 Turbo
+            </p>
+          </div>
+
+          <div className="flex items-center">
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#f44336 !important',
+                color: '#fff',
+                '&:hover': {
+                  backgroundColor: '#f44336',
+                  color: '#fff',
+                },
+              }}
+              onClick={() => {
+                signOut(auth);
+                router.push('/login');
+              }}
+              endIcon={<LogoutIcon />}>
+              Logout
+            </Button>
+          </div>
+        </div>
+
+        {/* Now display the user data */}
+        <div className="flex items-center justify-between max-w-2xl mx-auto px-4 py-4">
+          {isSignedIn && (
+            <>
+              <div
+                className='flex items-center'
+              >
+                <Avatar
+                  alt={signedInUserData.displayName}
+                  src={signedInUserData.photoURL}
+                  sx={{ width: 32, height: 32 }}
+                />
+                <p className="text-gray-600 ml-2">
+                  {signedInUserData.displayName}
+                </p>
+              </div>
+
+              <p
+                className="text-gray-600 ml-2"
+                style={{ fontSize: "0.8rem" }}
+              >
+                {signedInUserData.email}
+              </p>
+
+              <p
+                className="text-gray-600 ml-2"
+                style={{ fontSize: "0.8rem" }}
+              >
+                {signedInUserData.uid}
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Now Display some of the things that the user can ask from the bot */}
+        <div className="flex-col items-center justify-between max-w-2xl mx-auto px-4 py-2">
+          <p className="text-gray-600 ml-2"
+            style={{ fontSize: "1.4rem", borderBottom: "1px solid #ccc",marginBottom:"10px" }}
+          >
+            You can ask me anything like:
+          </p>
+          <ul className="text-gray-600 ml-2">
+            <li>What is Takhti Online Learning System?</li>
+            <li>What is the meaning of universe?</li>
+            <li>What is the meaning of science?</li>
+            <li>What is the meaning of How do we evolved?</li>
+          </ul>
+          <p className="text-gray-600 ml-2">
+            and many more...
+          </p>
+        </div>
+
+      </header>
       <main
         className="relative max-w-2xl mx-auto">
-        <div className='sticky top-0 w-full pt-10 px-4'>
+        <div className='sticky top-0 w-full pt-5 px-4'>
           <ChatInput onSend={(input) => callApi(input)} disabled={loading} />
         </div>
 
@@ -168,6 +384,7 @@ export default function Home() {
               key={message.key}
               text={message.text}
               from={message.from}
+              userPhotoURL={signedInUserData?.photoURL}
             />
           ))}
           {(messages.length == 0) && (

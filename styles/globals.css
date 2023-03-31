@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
+
+* {
+    font-family: "Poppins", sans-serif !important;
+    padding: auto;
+}
+
+@media (max-width: 600px) {
+    * {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        padding: auto;
+    }
+}
+
+html,
+body {
+    height: 100vh;
+}
+
+.page-wrapper {
+    min-height: "100vh";
+}
+
+.job-list::-webkit-scrollbar {
+    display: none;
+}
+
+.job-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media (max-width: 430px) {
+    .nav-mobile-link {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        padding-top: 14px !important;
+    }
+
+    .button-group-text {
+        font-size: 12px !important;
+    }
+
+    .login__mob-heading {
+        padding-left: 25px !important;
+        padding-right: 25px !important;
+    }
+}
