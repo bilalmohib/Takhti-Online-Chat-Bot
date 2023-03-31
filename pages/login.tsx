@@ -169,6 +169,7 @@ const Login: React.FC = () => {
                 // @ts-ignore
                 const token = credential.accessToken;
                 // The signed-in user info.
+                setSignedInUserData(result.user);
                 const user = result.user;
                 // alert(`Congratulations! ${user.displayName} you are successfully registered`);
                 // Navigate to Home Page
@@ -374,7 +375,7 @@ const Login: React.FC = () => {
                                 variant="h3"
                                 component="div"
                                 sx={{
-                                    height: { lg: (isSignedIn) ? ("648") : "200px" },
+                                    height: { lg: (isSignedIn) ? ("auto") : "200px" },
                                     marginTop: { lg: "140px", xs: "110px" },
                                     marginLeft: { sm: "15%", xs: "5%" },
                                     marginRight: { sm: "15%", xs: "5%" },

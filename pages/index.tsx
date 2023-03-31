@@ -192,7 +192,7 @@ export default function Home() {
         // When the user state is known, we set the state isSignedIn to false
         setIsSignedIn(false);
         // Navigate to Login Page
-        alert("Please Login First")
+        // alert("Please Login First")
         router.push('/login');
         // ...
       }
@@ -310,8 +310,14 @@ export default function Home() {
                 },
               }}
               onClick={() => {
-                signOut(auth);
-                router.push('/login');
+                // signOut(auth)
+                signOut(auth).then(() => {
+                  // Sign-out successful.
+                  router.push('/login');
+                }).catch((error) => {
+                  // An error happened.
+                  alert("Error Logging Out: " + error.message)
+                });
               }}
               endIcon={<LogoutIcon />}>
               Logout
@@ -356,7 +362,7 @@ export default function Home() {
         {/* Now Display some of the things that the user can ask from the bot */}
         <div className="flex-col items-center justify-between max-w-2xl mx-auto px-4 py-2">
           <p className="text-gray-600 ml-2"
-            style={{ fontSize: "1.4rem", borderBottom: "1px solid #ccc",marginBottom:"10px" }}
+            style={{ fontSize: "1.4rem", borderBottom: "1px solid #ccc", marginBottom: "10px" }}
           >
             You can ask me anything like:
           </p>
