@@ -111,8 +111,9 @@ const Login: React.FC = () => {
                     setSignedInUserData(user);
                     console.log("Signed In User Data ==> ", user);
                     setIsSignedIn(true);
-                    router.push('/');
                 }
+                alert("User is Signed In");
+                router.push('/');
             } else {
                 // User is signed out
                 console.log("User is Not Signed In Yet");

@@ -88,7 +88,7 @@ export default async function handler(
 
     // Please remove question mark and extra spaces from the response
     // There must be no extra spaces in the response
-    let cleanedResponse = response.replace(/\?/g, '');
+    // let cleanedResponse = response.replace(/\?/g, '');
 
-    res.status(200).json({ text: cleanedResponse });
+    res.status(200).json({ text: response });
 }
