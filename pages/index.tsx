@@ -204,6 +204,11 @@ export default function Home() {
   const callApi = async (input: string) => {
     setLoading(true);
 
+    if (input === "") {
+      alert("Please Enter Something");
+      return;
+    }
+
     const myMessage: MessageProps = {
       text: input,
       from: Creator.Me,
