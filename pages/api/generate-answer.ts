@@ -47,8 +47,8 @@ export default async function handler(
     const aiResult = await openai.createCompletion({
         model: 'text-davinci-003',
         prompt: `
-        If question is Hi then you have to reply "Hello Welcome to Takhti Online Learning Management System"
-        When some one asks you "Who is Adeel Imtiaz?" then you have to reply "Founder of Takhti Online and Brain Launch Channels.
+        If question is Hi then you have to reply 'Hello Welcome to Takhti Online Learning Management System'
+        When some one asks you 'Who is Adeel Imtiaz?" then you have to reply 'Founder of Takhti Online and Brain Launch Channels.
         Founder of Takhti Developers.
         Founder of Takhti Online Learning Management System.
         Founder of Takhti Online School.
@@ -56,12 +56,12 @@ export default async function handler(
         Founder of Takhti Online University.
         Founder of Takhti Online Academy.
         Founder of Takhti Online Institute.
-        "
-        When some one asks you "What is takhti online learning management system?" then you have to reply 
-        "Takhti online learning management system is a project that is being developed by takhti developers
+        '
+        When some one asks you 'What is takhti online learning management system?' then you have to reply 
+        'Takhti online learning management system is a project that is being developed by takhti developers
         to help people learn and share knowledge.
         The project is about creating a new type of learning system that will gather the people of pakistan together to learn and share knowledge. 
-        "
+        '
         Otherwise if none of the above questions are asked then please answer the following question asked: 
         ${prompt}`,
         // prompt: "What is javascript?",
