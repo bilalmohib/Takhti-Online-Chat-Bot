@@ -235,21 +235,21 @@ export default function Home() {
         text: response.text,
         from: Creator.Bot,
         key: new Date().getTime(),
-        userPhotoURL: signedInUserData.photoURL
+        userPhotoURL: "/bot.png"
       };
 
       // Now adding the data to the firestore
-      addData(
-        {
-          "user": signedInUserData.email,
-          "uuid": signedInUserData.uid,
-          "name": signedInUserData.displayName,
-          "photoURL": signedInUserData.photoURL,
-          "question": input,
-          "answer": response.text,
-          "timestamp": new Date().toLocaleString()
-        }
-      );
+      // addData(
+      //   {
+      //     "user": signedInUserData.email,
+      //     "uuid": signedInUserData.uid,
+      //     "name": signedInUserData.displayName,
+      //     "photoURL": signedInUserData.photoURL,
+      //     "question": input,
+      //     "answer": response.text,
+      //     "timestamp": new Date().toLocaleString()
+      //   }
+      // );
 
       setMessages([...messagesRef.current, botMessage]);
     } else {
@@ -385,7 +385,7 @@ export default function Home() {
       </header>
       <main
         className="relative max-w-2xl mx-auto">
-        <div className='sticky top-0 w-full pt-5 px-4'>
+        {/* <div className='sticky top-0 w-full pt-5 px-4'>
           <ChatInput onSend={(input) => callApi(input)} disabled={loading} />
         </div>
 
@@ -403,10 +403,11 @@ export default function Home() {
               I am at your service. Ask me anything.
             </p>
           )}
-        </div>
-        {/* <h1 className="text-center text-black" style={{fontSize:"3rem"}}>
-          Under Development
-        </h1> */}
+        </div> */}
+        <h1 className="text-center text-black" style={{fontSize:"3rem"}}>
+          {/* Under Development  */}
+          Sorry ! Currently The free chat limit has been reached. Please try again later.
+        </h1>
         <br />
       </main>
     </>

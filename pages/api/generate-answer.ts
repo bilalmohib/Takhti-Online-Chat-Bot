@@ -12,7 +12,8 @@ interface GenerateNextApiRequest extends NextApiRequest {
 };
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    // apiKey: process.env.OPENAI_API_KEY,
+    apiKey:"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"
 });
 const openai = new OpenAIApi(configuration);
 
@@ -75,7 +76,7 @@ export default async function handler(
 
     // Please remove question mark and extra spaces from the response
     // There must be no extra spaces in the response
-    const cleanedResponse = response.replace(/\?/g, '').replace(/\s+/g, ' ');
+    // const cleanedResponse = response.replace(/\?/g, '').replace(/\s+/g, ' ');
 
-    res.status(200).json({ text: cleanedResponse });
+    res.status(200).json({ text: response });
 }
